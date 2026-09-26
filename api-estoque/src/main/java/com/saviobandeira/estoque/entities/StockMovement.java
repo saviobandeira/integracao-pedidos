@@ -1,5 +1,7 @@
 package com.saviobandeira.estoque.entities;
 
+import com.saviobandeira.estoque.entities.enums.StockMovementType;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -11,6 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 
 @Entity
 @Table(name = "tb_stock_movement")
@@ -22,6 +26,10 @@ public class StockMovement {
 
     @Column(nullable = false)
     private String orderNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StockMovementType type;
 
     @Column(nullable = false)
     private Integer quantity;

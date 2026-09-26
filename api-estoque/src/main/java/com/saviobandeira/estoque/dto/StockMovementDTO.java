@@ -16,6 +16,9 @@ public class StockMovementDTO {
     @NotBlank(message = "Número do pedido é obrigatório")
     private String orderNumber;
 
+    @NotNull(message = "Tipo não pode ser nulo")
+    private StockMovementType type;
+
     @NotNull(message = "Quantidade é obrigatório")
     @Positive(message = "Quantidade não pode ser igual ou menor que zero")
     private Integer quantity;

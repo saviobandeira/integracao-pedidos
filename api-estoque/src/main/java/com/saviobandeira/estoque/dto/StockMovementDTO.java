@@ -1,6 +1,7 @@
 package com.saviobandeira.estoque.dto;
 
 import com.saviobandeira.estoque.entities.StockMovement;
+import com.saviobandeira.estoque.entities.enums.StockMovementType;
 
 import java.util.Date;
 
@@ -12,11 +13,11 @@ public class StockMovementDTO {
 
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Número do pedido é obrigatório")
     private String orderNumber;
 
-    @NotNull
-    @Positive
+    @NotNull(message = "Quantidade é obrigatório")
+    @Positive(message = "Quantidade não pode ser igual ou menor que zero")
     private Integer quantity;
     private Date createdAt = new Date();
 

@@ -2,6 +2,7 @@ package com.saviobandeira.estoque.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductRequestDTO {
 
@@ -11,6 +12,7 @@ public class ProductRequestDTO {
     @NotBlank(message = "Nome é obrigatório")
     private String name;
 
+    @NotNull(message = "Preço não pode ser nulo")
     @Positive(message = "Preço deve ser maior que zero")
     private Double price;
 

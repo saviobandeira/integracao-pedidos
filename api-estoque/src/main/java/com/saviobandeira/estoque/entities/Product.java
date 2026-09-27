@@ -31,7 +31,7 @@ public class Product {
     private Double price;
 
     @Column(nullable = false)
-    private Integer balance;
+    private Integer balance = 0;
     private Boolean active = true;
     private Date created_at = new Date();
 

@@ -3,6 +3,7 @@ package com.saviobandeira.estoque.controllers.handlers;
 import com.saviobandeira.estoque.services.exceptions.ResourceNotFoundException;
 import com.saviobandeira.estoque.dto.CustomError;
 import com.saviobandeira.estoque.dto.ValidationError;
+import com.saviobandeira.estoque.services.exceptions.DuplicateResourceException;
 
 import java.time.Instant;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -33,5 +35,19 @@ public class ControllerExceptionHandler {
             validationError.addError(fieldError.getField(), fieldError.getDefaultMessage());
         }
         return ResponseEntity.status(status).body(validationError);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<CustomError> duplicateResource(DuplicateResourceException error, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        CustomError customError = new CustomError(Instant.now(), status.value(), error.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(customError);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<CustomError> dataIntegrityViolation(DataIntegrityViolationException error, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        CustomError customError = new CustomError(Instant.now(), status.value(), "A operação viola uma restrição de integridade dos dados", request.getRequestURI());
+        return ResponseEntity.status(status).body(customError);
     }
 }

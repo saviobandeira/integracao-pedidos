@@ -36,7 +36,7 @@ public class Product {
     private Date created_at = new Date();
 
     @OneToMany(mappedBy = "product")
-    private List<StockMovement> stockMovements = new ArrayList<>();
+    private List<Movement> movements = new ArrayList<>();
 
     public Product() {
     }
@@ -107,8 +107,8 @@ public class Product {
         this.created_at = created_at;
     }
 
-    public List<StockMovement> getStockMovements() {
-        return stockMovements;
+    public List<Movement> getMovements() {
+        return movements;
     }
 
     @Override

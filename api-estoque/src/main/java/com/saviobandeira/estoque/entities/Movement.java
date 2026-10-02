@@ -1,6 +1,6 @@
 package com.saviobandeira.estoque.entities;
 
-import com.saviobandeira.estoque.entities.enums.StockMovementType;
+import com.saviobandeira.estoque.entities.enums.MovementType;
 
 import java.util.Date;
 import java.util.Objects;
@@ -17,8 +17,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 
 @Entity
-@Table(name = "tb_stock_movement")
-public class StockMovement {
+@Table(name = "tb_movement")
+public class Movement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class StockMovement {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StockMovementType type;
+    private MovementType type;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -40,10 +40,10 @@ public class StockMovement {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public StockMovement() {
+    public Movement() {
     }
 
-    public StockMovement(Long id, String orderNumber, Integer quantity, StockMovementType type, Date createdAt, Product product) {
+    public Movement(Long id, String orderNumber, Integer quantity, MovementType type, Date createdAt, Product product) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.quantity = quantity;
@@ -76,11 +76,11 @@ public class StockMovement {
         this.quantity = quantity;
     }
 
-    public StockMovementType getType() {
+    public MovementType getType() {
         return type;
     }
 
-    public void setType(StockMovementType type) {
+    public void setType(MovementType type) {
         this.type = type;
     }
 
@@ -104,7 +104,7 @@ public class StockMovement {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        StockMovement that = (StockMovement) o;
+        Movement that = (Movement) o;
         return Objects.equals(id, that.id);
     }
 

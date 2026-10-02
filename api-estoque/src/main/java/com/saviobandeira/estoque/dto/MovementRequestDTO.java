@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public class StockMovementRequestDTO {
+public class MovementRequestDTO {
 
     @NotBlank(message = "Número do pedido é obrigatório")
     private String orderNumber;
@@ -13,7 +13,7 @@ public class StockMovementRequestDTO {
     @Positive(message = "Quantidade não pode ser igual ou menor que zero")
     private Integer quantity;
 
-    public StockMovementRequestDTO(String orderNumber, Integer quantity) {
+    public MovementRequestDTO(String orderNumber, Integer quantity) {
         this.orderNumber = orderNumber;
         this.quantity = quantity;
     }

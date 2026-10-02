@@ -1,7 +1,7 @@
 package com.saviobandeira.estoque.dto;
 
-import com.saviobandeira.estoque.entities.StockMovement;
-import com.saviobandeira.estoque.entities.enums.StockMovementType;
+import com.saviobandeira.estoque.entities.Movement;
+import com.saviobandeira.estoque.entities.enums.MovementType;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public class StockMovementDTO {
+public class MovementDTO {
 
     private Long id;
 
@@ -17,7 +17,7 @@ public class StockMovementDTO {
     private String orderNumber;
 
     @NotNull(message = "Tipo não pode ser nulo")
-    private StockMovementType type;
+    private MovementType type;
 
     @NotNull(message = "Quantidade é obrigatório")
     @Positive(message = "Quantidade não pode ser igual ou menor que zero")
@@ -27,10 +27,10 @@ public class StockMovementDTO {
     @NotNull(message = "Produto não pode ser nulo")
     private ProductDTO product;
 
-    public StockMovementDTO() {
+    public MovementDTO() {
     }
 
-    public StockMovementDTO(Long id, String orderNumber, Integer quantity, StockMovementType type, ProductDTO product, Date createdAt) {
+    public MovementDTO(Long id, String orderNumber, Integer quantity, MovementType type, ProductDTO product, Date createdAt) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.quantity = quantity;
@@ -39,7 +39,7 @@ public class StockMovementDTO {
         this.createdAt = createdAt;
     }
 
-    public StockMovementDTO(StockMovement entity) {
+    public MovementDTO(Movement entity) {
         id = entity.getId();
         orderNumber = entity.getOrderNumber();
         quantity = entity.getQuantity();
@@ -64,7 +64,7 @@ public class StockMovementDTO {
         return createdAt;
     }
 
-    public StockMovementType getType() {
+    public MovementType getType() {
         return type;
     }
 

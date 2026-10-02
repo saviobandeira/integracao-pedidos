@@ -5,6 +5,7 @@ import com.saviobandeira.estoque.dto.CustomError;
 import com.saviobandeira.estoque.dto.ValidationError;
 import com.saviobandeira.estoque.services.exceptions.DuplicateResourceException;
 import com.saviobandeira.estoque.services.exceptions.InsufficientBalanceException;
+import com.saviobandeira.estoque.services.exceptions.ReversalNotAllowedException;
 
 import java.time.Instant;
 
@@ -59,4 +60,10 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(status).body(customError);
     }
 
+    @ExceptionHandler(ReversalNotAllowedException.class)
+    public ResponseEntity<CustomError> reversalNotAllowed(ReversalNotAllowedException error, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNPROCESSABLE_CONTENT;
+        CustomError customError = new CustomError(Instant.now(), status.value(), error.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(customError);
+    }
 }

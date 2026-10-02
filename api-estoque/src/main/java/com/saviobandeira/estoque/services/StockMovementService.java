@@ -9,6 +9,7 @@ import com.saviobandeira.estoque.entities.enums.StockMovementType;
 import com.saviobandeira.estoque.repositories.ProductRepository;
 import com.saviobandeira.estoque.entities.Product;
 import com.saviobandeira.estoque.services.exceptions.InsufficientBalanceException;
+import com.saviobandeira.estoque.services.exceptions.ReversalNotAllowedException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class StockMovementService {
     @Transactional
     public StockMovementDTO insert(Long productId, StockMovementRequestDTO request, StockMovementType type) {
         Product product = productRepository.findById(productId).orElseThrow(
-                () -> new ResourceNotFoundException("Nenhum produto encontrado com o id " + productId)
+                () -> new ResourceNotFoundException("Nenhum produto encontrado com o id" + productId)
         );
 
         Integer balance = product.getBalance();
@@ -53,6 +54,35 @@ public class StockMovementService {
         stockMovement.setProduct(product);
         stockMovement.setType(type);
 
+        stockMovement = repository.save(stockMovement);
+        return new StockMovementDTO(stockMovement);
+    }
+
+    @Transactional
+    public StockMovementDTO reverse(Long id) {
+        StockMovement stockMovement = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Não foi encontrada nenhuma movimentação com o id " + id)
+        );
+
+        StockMovementType type = stockMovement.getType();
+        if(type == StockMovementType.REVERSAL) {
+            throw new ReversalNotAllowedException("Não é possivel reverter uma movimentação de reverção");
+        }
+
+        Product product = stockMovement.getProduct();
+
+        Integer quantity = stockMovement.getQuantity();
+        Integer balance = product.getBalance();
+        if (type == StockMovementType.IN && balance < quantity) {
+            throw new InsufficientBalanceException("Saldo insuficiente");
+        }
+
+        Integer negatedQuantity = -(quantity);
+        product.setBalance(balance + negatedQuantity);
+
+        stockMovement.setOrderNumber(stockMovement.getOrderNumber());
+        stockMovement.setType(StockMovementType.REVERSAL);
+        stockMovement.setQuantity(0);
         stockMovement = repository.save(stockMovement);
         return new StockMovementDTO(stockMovement);
     }

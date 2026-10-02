@@ -42,4 +42,14 @@ public class StockMovementController {
                 .toUri();
         return ResponseEntity.created(uri).body(dto);
     }
+
+    @PostMapping(value = "/stock_movements/{id}/reversal")
+    public ResponseEntity<StockMovementDTO> reverse(@PathVariable Long id) {
+        StockMovementDTO dto = service.reverse(id);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/stock_movements/{id}")
+                .buildAndExpand(dto.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
 }

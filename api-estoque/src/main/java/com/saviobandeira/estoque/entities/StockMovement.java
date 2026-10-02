@@ -43,12 +43,13 @@ public class StockMovement {
     public StockMovement() {
     }
 
-    public StockMovement(Long id, String orderNumber, Integer quantity, Date createdAt, Product product) {
+    public StockMovement(Long id, String orderNumber, Integer quantity, StockMovementType type, Date createdAt, Product product) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.quantity = quantity;
-        this.createdAt = createdAt;
+        this.type = type;
         this.product = product;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -75,12 +76,12 @@ public class StockMovement {
         this.quantity = quantity;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public StockMovementType getType() {
+        return type;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setType(StockMovementType type) {
+        this.type = type;
     }
 
     public Product getProduct() {
@@ -89,6 +90,14 @@ public class StockMovement {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.saviobandeira.estoque.services.exceptions.ResourceNotFoundException;
 import com.saviobandeira.estoque.dto.CustomError;
 import com.saviobandeira.estoque.dto.ValidationError;
 import com.saviobandeira.estoque.services.exceptions.DuplicateResourceException;
+import com.saviobandeira.estoque.services.exceptions.InsufficientBalanceException;
 
 import java.time.Instant;
 
@@ -50,4 +51,12 @@ public class ControllerExceptionHandler {
         CustomError customError = new CustomError(Instant.now(), status.value(), "A operação viola uma restrição de integridade dos dados", request.getRequestURI());
         return ResponseEntity.status(status).body(customError);
     }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<CustomError> insufficientBalance(InsufficientBalanceException error, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.UNPROCESSABLE_CONTENT;
+        CustomError customError = new CustomError(Instant.now(), status.value(), error.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(customError);
+    }
+
 }

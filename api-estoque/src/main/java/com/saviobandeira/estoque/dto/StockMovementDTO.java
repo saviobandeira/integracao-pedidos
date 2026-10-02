@@ -24,13 +24,18 @@ public class StockMovementDTO {
     private Integer quantity;
     private Date createdAt = new Date();
 
+    @NotNull(message = "Produto não pode ser nulo")
+    private ProductDTO product;
+
     public StockMovementDTO() {
     }
 
-    public StockMovementDTO(Long id, String orderNumber, Integer quantity, Date createdAt) {
+    public StockMovementDTO(Long id, String orderNumber, Integer quantity, StockMovementType type, ProductDTO product, Date createdAt) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.quantity = quantity;
+        this.type = type;
+        this.product = product;
         this.createdAt = createdAt;
     }
 
@@ -38,6 +43,8 @@ public class StockMovementDTO {
         id = entity.getId();
         orderNumber = entity.getOrderNumber();
         quantity = entity.getQuantity();
+        type = entity.getType();
+        product = new ProductDTO(entity.getProduct());
         createdAt = entity.getCreatedAt();
     }
 
@@ -55,5 +62,13 @@ public class StockMovementDTO {
 
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public StockMovementType getType() {
+        return type;
+    }
+
+    public ProductDTO getProduct() {
+        return product;
     }
 }

@@ -47,12 +47,13 @@ public class MovementService {
         }
         product.setBalance(balance + quantity);
 
-        Movement movement = new Movement();
-
-        movement.setQuantity(quantity);
-        movement.setOrderNumber(request.getOrderNumber());
-        movement.setProduct(product);
-        movement.setType(type);
+        Movement movement = new Movement(
+                request.getOrderNumber(),
+                request.getPostingDate(),
+                quantity,
+                type,
+                product
+        );
 
         movement = repository.save(movement);
         return new MovementDTO(movement);
@@ -80,9 +81,9 @@ public class MovementService {
         Integer negatedQuantity = -(quantity);
         product.setBalance(balance + negatedQuantity);
 
-        movement.setOrderNumber(movement.getOrderNumber());
-        movement.setType(MovementType.REVERSAL);
-        movement.setQuantity(0);
+        movement = movement.reverse();
+        System.out.println(movement.toString());
+
         movement = repository.save(movement);
         return new MovementDTO(movement);
     }

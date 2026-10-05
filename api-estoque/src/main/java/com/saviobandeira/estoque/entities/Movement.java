@@ -2,8 +2,9 @@ package com.saviobandeira.estoque.entities;
 
 import com.saviobandeira.estoque.entities.enums.MovementType;
 
-import java.util.Date;
 import java.util.Objects;
+import java.time.LocalDate;
+import java.time.Instant;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -15,6 +16,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.PrePersist;
 
 @Entity
 @Table(name = "tb_movement")
@@ -27,77 +31,86 @@ public class Movement {
     @Column(nullable = false)
     private String orderNumber;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MovementType type;
+    private LocalDate postingDate;
 
     @Column(nullable = false)
     private Integer quantity;
 
-    private Date createdAt = new Date();
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MovementType type;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reversed_id", unique = true)
+    private Movement reversed;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Movement() {
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP")
+    private Instant createdAt;
+
+    @PrePersist
+    void prePersist() {
+        this.createdAt = Instant.now();
     }
 
-    public Movement(Long id, String orderNumber, Integer quantity, MovementType type, Date createdAt, Product product) {
-        this.id = id;
+    protected Movement() {
+    }
+
+    public Movement(String orderNumber, LocalDate postingDate, Integer quantity, MovementType type, Product product) {
         this.orderNumber = orderNumber;
+        this.postingDate = postingDate;
         this.quantity = quantity;
         this.type = type;
         this.product = product;
-        this.createdAt = createdAt;
+    }
+
+    public Movement reverse() {
+        Movement reversal = new Movement(
+                this.orderNumber,
+                LocalDate.now(),
+                -(this.quantity),
+                MovementType.REVERSAL,
+                this.product
+        );
+
+        reversal.reversed = this;
+        return reversal;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(String order_number) {
-        this.orderNumber = order_number;
+    public LocalDate getPostingDate() {
+        return postingDate;
     }
 
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
     public MovementType getType() {
         return type;
     }
 
-    public void setType(MovementType type) {
-        this.type = type;
+    public Movement getReversed() {
+        return reversed;
     }
 
     public Product getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
     }
 
     @Override

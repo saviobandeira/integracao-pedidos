@@ -7,8 +7,6 @@ import com.saviobandeira.estoque.services.exceptions.ResourceNotFoundException;
 import com.saviobandeira.estoque.dto.ProductRequestDTO;
 import com.saviobandeira.estoque.services.exceptions.DuplicateResourceException;
 
-import java.util.Date;
-
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
